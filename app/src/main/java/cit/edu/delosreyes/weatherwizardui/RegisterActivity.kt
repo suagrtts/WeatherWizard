@@ -71,6 +71,8 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please accept the Terms & Privacy Policy", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            UserSession.name = name
+            UserSession.email = email
 
             Toast.makeText(this, "Account created! Welcome, $name!", Toast.LENGTH_SHORT).show()
             intent.putExtra("USER_NAME", name)
