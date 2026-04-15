@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,6 +16,8 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        val session = UserSession(this)
+
         val logo    = findViewById<ImageView>(R.id.ivSplashLogo)
         val appName = findViewById<TextView>(R.id.tvSplashName)
         val tagline = findViewById<TextView>(R.id.tvSplashTagline)
@@ -24,8 +27,13 @@ class SplashActivity : AppCompatActivity() {
         tagline.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up))
 
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, LoginActivity::class.java))
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            if(session.isLoggedIn()) {
+                val intent = Intent(this, MainActivity:: class.java)
+                startActivity(intent)
+            }else {
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+            }
             finish()
         }, 2200)
     }

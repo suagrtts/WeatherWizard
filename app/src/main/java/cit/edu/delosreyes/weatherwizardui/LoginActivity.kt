@@ -50,6 +50,8 @@ class LoginActivity : AppCompatActivity() {
             val email    = editUsername.text.toString().trim()
             val password = editPassword.text.toString().trim()
 
+
+
             if (email.isEmpty()) {
                 editUsername.error = "Email is required"
                 return@setOnClickListener
@@ -67,9 +69,30 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            val session = UserSession(this)
+
+            // Get the saved account from SharedPreferences
+            val savedEmail = session.getRegisteredEmail()
+            val savedPassword = session.getRegisteredPassword()
+            val savedName = session.getRegisteredName() ?: "User"
+
+            // Check credentials FIRST
             if (email == adminEmail && password == adminPassword) {
+                session.createLoginSession("Admin User", email)
                 Toast.makeText(this, "Welcome, Admin!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, MainActivity::class.java))
+
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("WELCOME_MESSAGE", "Welcome back, Admin User!")
+                startActivity(intent)
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+                finish()
+            } else if (savedEmail != null && email == savedEmail && password == savedPassword) {
+                session.createLoginSession(savedName, email)
+                Toast.makeText(this, "Welcome back, $savedName!", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("WELCOME_MESSAGE", "Welcome back, $savedName!")
+                startActivity(intent)
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
                 finish()
             } else {
@@ -106,7 +129,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private suspend fun triggerGoogleSignIn(credentialManager: CredentialManager) {
-       val nonce = java.util.UUID.randomUUID().toString()
+        val nonce = java.util.UUID.randomUUID().toString()
 
         val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
@@ -131,17 +154,23 @@ class LoginActivity : AppCompatActivity() {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
 
                 val email = googleIdTokenCredential.id
-                val displayName = googleIdTokenCredential.displayName
+                // Use the Google name, or default to "Google User" if it's null
+                val displayName = googleIdTokenCredential.displayName ?: "Google User"
 
                 Log.d("Auth", "Google Sign-in Success: $email, $displayName")
-                UserSession.email = email
-                if (displayName != null) {
-                    UserSession.name = displayName
-                }
-                
-                Toast.makeText(this, "Welcome, ${UserSession.name}!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, MainActivity::class.java))
+
+                // ── FIX: Correctly instantiate and save Google data to SharedPreferences ──
+                val session = UserSession(this@LoginActivity)
+                session.createLoginSession(displayName, email)
+
+                Toast.makeText(this, "Welcome, $displayName!", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                // Pass data to next screen (Assignment Requirement)
+                intent.putExtra("WELCOME_MESSAGE", "Welcome back, $displayName!")
+                startActivity(intent)
                 finish()
+
             } else {
                 Log.e("Auth", "Unexpected type of credential: ${credential.type}")
                 Toast.makeText(this, "Unexpected login error", Toast.LENGTH_SHORT).show()

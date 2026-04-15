@@ -21,9 +21,13 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //display user info on profile
-        view.findViewById<TextView>(R.id.tvProfileName).text = UserSession.name
-        view.findViewById<TextView>(R.id.tvProfileEmail).text = UserSession.email
+        val session = UserSession(requireContext())
 
+        val savedName = session.getName()
+        val savedEmail = session.getEmail()
+
+        view.findViewById<TextView>(R.id.tvProfileName).text = savedName
+        view.findViewById<TextView>(R.id.tvProfileEmail).text = savedEmail
 
         // Add saved location
         view.findViewById<TextView>(R.id.tvAddLocation).setOnClickListener {
@@ -59,7 +63,7 @@ class ProfileFragment : Fragment() {
                 .setTitle("Log Out")
                 .setMessage("Are you sure you want to log out?")
                 .setPositiveButton("Log Out") { _, _ ->
-                    UserSession.clear()
+                    session.logoutUser()
                     startActivity(Intent(requireContext(), LoginActivity::class.java))
                     requireActivity().finishAffinity()
                 }

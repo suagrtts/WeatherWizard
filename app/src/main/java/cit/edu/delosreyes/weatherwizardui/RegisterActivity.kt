@@ -71,13 +71,21 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please accept the Terms & Privacy Policy", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            UserSession.name = name
-            UserSession.email = email
+
+            // ── FIX: Save the new user to SharedPreferences ──
+            val session = UserSession(this)
+
+            session.registerAccount(name, email, pass)
+
+            session.createLoginSession(name, email)
 
             Toast.makeText(this, "Account created! Welcome, $name!", Toast.LENGTH_SHORT).show()
-            intent.putExtra("USER_NAME", name)
-            intent.putExtra("USER_EMAIL", email)
-            startActivity(Intent(this, MainActivity::class.java))
+
+            // ── FIX: Attach the data to the NEW intent ──
+            val mainIntent = Intent(this, MainActivity::class.java)
+            mainIntent.putExtra("WELCOME_MESSAGE", "Welcome to WeatherWizard, $name!")
+
+            startActivity(mainIntent)
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             finishAffinity()
         }
