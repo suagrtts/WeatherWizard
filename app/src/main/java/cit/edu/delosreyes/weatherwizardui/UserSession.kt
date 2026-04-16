@@ -21,6 +21,11 @@ class UserSession(context: Context) {
         editor.apply()
     }
 
+    fun changePassword(newPassword: String) {
+        editor.putString("REGISTERED_PASSWORD", newPassword)
+        editor.apply()
+    }
+
     fun isLoggedIn(): Boolean {
         return prefs.getBoolean("IS_LOGGED_IN", false)
     }
@@ -39,14 +44,6 @@ class UserSession(context: Context) {
         editor.putString("USERNAME", "Guest")
         editor.putString("EMAIL", "No email provided")
         editor.apply()
-    }
-
-    fun getEmail(): String? {
-        return prefs.getString("EMAIL", "No email provided")
-    }
-
-    fun getName(): String? {
-        return prefs.getString("USERNAME", "No username provided")
     }
 
     // These act as our "Database Read" during login

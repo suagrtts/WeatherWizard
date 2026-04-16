@@ -23,8 +23,9 @@ class ProfileFragment : Fragment() {
         //display user info on profile
         val session = UserSession(requireContext())
 
-        val savedName = session.getName()
-        val savedEmail = session.getEmail()
+        val savedName = session.getRegisteredName()
+        val savedEmail = session.getRegisteredEmail()
+        val savedPassword = session.getRegisteredPassword()
 
         view.findViewById<TextView>(R.id.tvProfileName).text = savedName
         view.findViewById<TextView>(R.id.tvProfileEmail).text = savedEmail
@@ -54,7 +55,9 @@ class ProfileFragment : Fragment() {
 
         // Change password row
         view.findViewById<LinearLayout>(R.id.rowChangePassword).setOnClickListener {
-            Toast.makeText(requireContext(), "Change password coming soon.", Toast.LENGTH_SHORT).show()
+            (activity as MainActivity).loadFragment(
+                ChangePasswordFragment(), addToBackStack = true
+            )
         }
 
         // Log out row — confirmation dialog
