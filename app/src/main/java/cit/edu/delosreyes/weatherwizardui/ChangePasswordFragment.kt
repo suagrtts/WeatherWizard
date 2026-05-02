@@ -6,12 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputEditText
 
+/**
+ * ChangePasswordFragment — verifies the current password against SQLite,
+ * then updates both SQLite and the SharedPreferences cache.
+ *
+ * IDs used (all present in fragment_change_password.xml):
+ *   tvBack  editCurrentPassword  editNewPassword  editConfirmNewPassword  btnSavePassword
+ */
 class ChangePasswordFragment : Fragment() {
-    // Tracks the current password in-session (starts as the hardcoded admin password)
+
+    private val db      by lazy { WeatherDatabase.getInstance(requireContext()) }
+    private val session by lazy { UserSession(requireContext()) }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,32 +38,35 @@ class ChangePasswordFragment : Fragment() {
         }
 
         view.findViewById<Button>(R.id.btnSavePassword).setOnClickListener {
-            val session = UserSession(requireContext())
-            var currentPassword = session.getRegisteredPassword()
-
+            val email   = session.getEmail()
             val current = editCurrent.text.toString()
             val new     = editNew.text.toString()
             val confirm = editConfirm.text.toString()
 
-            // 1. Check current password
-            if (current != currentPassword) {
+            if (email.isEmpty()) {
+                AppToast.show(requireContext(), "No account session found.")
+                return@setOnClickListener
+            }
+
+            // ── Verify current password via SQLite ─────────────────────────────
+            if (db.authenticateUser(email, current) == null) {
                 editCurrent.error = "Incorrect current password"
                 return@setOnClickListener
             }
-            // 2. Validate new password
             if (new.length < 6) {
                 editNew.error = "Minimum 6 characters"
                 return@setOnClickListener
             }
-            // 3. Check new == confirm
             if (new != confirm) {
                 editConfirm.error = "Passwords do not match"
                 return@setOnClickListener
             }
-            // 4. Save and go back
-            currentPassword = new
+
+            // ── Update SQLite and SharedPreferences cache ─────────────────────
+            db.updatePassword(email, new)
             session.changePassword(new)
-            Toast.makeText(requireContext(), "Password changed successfully.", Toast.LENGTH_SHORT).show()
+
+            AppToast.show(requireContext(), "Password changed successfully.")
             parentFragmentManager.popBackStack()
         }
     }

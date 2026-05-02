@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
+    android:paddingBottom="80dp"
+    android:clipToPadding="false"
     android:overScrollMode="never">
 
     <LinearLayout
@@ -30,9 +32,10 @@
                 android:textStyle="bold"
                 android:textColor="@color/white" />
             <TextView
+                android:id="@+id/tvCalendarMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="March 2026"
+                android:text=""
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="@color/azure_light" />
@@ -105,219 +108,19 @@
                 android:textColor="@color/text_muted" android:gravity="center"/>
         </LinearLayout>
 
-        <!-- Calendar rows -->
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="vertical" android:paddingStart="10dp" android:paddingEnd="10dp"
-            android:layout_marginBottom="14dp">
-
-            <!-- Row 1: 1–7 -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:layout_marginBottom="4dp">
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_moderate" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="🌤" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="1" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_avoid" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="⛈" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="2" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_avoid" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="🌧" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="3" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_moderate" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="⛅" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="4" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_best" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="☀️" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="5" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_best" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="☀️" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="6" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_best">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="☀️" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="7" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- Row 2: 8–14 -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:layout_marginBottom="4dp">
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_moderate" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="🌤" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="8" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_avoid" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="🌧" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="9" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_avoid" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="⛈" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="10" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_avoid" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="🌧" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="11" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_moderate" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="⛅" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="12" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_best" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="☀️" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="13" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_best">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="☀️" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="14" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- Row 3: 15–21 -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_best" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="☀️" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="15" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_moderate" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="🌤" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="16" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_moderate" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="⛅" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="17" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_avoid" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="🌧" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="18" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_avoid" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="⛈" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="19" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_moderate" android:layout_marginEnd="3dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="🌤" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="20" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                    android:orientation="vertical" android:gravity="center" android:padding="5dp"
-                    android:background="@drawable/bg_cal_best">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="☀️" android:textSize="11sp" android:gravity="center"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="21" android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/white" android:gravity="center"/>
-                </LinearLayout>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- Day detail card -->
+        <!-- Dynamic calendar grid container -->
         <LinearLayout
+            android:id="@+id/llCalendarGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_marginBottom="14dp" />
+
+        <!-- Forecast day detail card -->
+        <LinearLayout
+            android:id="@+id/llCalDetailCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -325,21 +128,24 @@
             android:padding="16dp"
             android:layout_marginStart="14dp"
             android:layout_marginEnd="14dp"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="12dp"
+            android:visibility="gone">
 
             <TextView
+                android:id="@+id/tvCalDetailDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="📅 Sunday, March 6"
+                android:text=""
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:textColor="@color/green_good"
                 android:layout_marginBottom="8dp" />
 
             <TextView
+                android:id="@+id/tvCalDetailRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="✅ Best Day to Go Out"
+                android:text=""
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/green_good"
@@ -349,22 +155,57 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                    android:layout_weight="1" android:text="🌡 High 32°C"
+                <TextView
+                    android:id="@+id/tvCalDetailTemp"
+                    android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text=""
                     android:textSize="12sp" android:textColor="@color/white"
                     android:background="@drawable/bg_chip" android:padding="8dp"
                     android:gravity="center" android:layout_marginEnd="6dp"/>
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                    android:layout_weight="1" android:text="💧 8% rain"
+                <TextView
+                    android:id="@+id/tvCalDetailRain"
+                    android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text=""
                     android:textSize="12sp" android:textColor="@color/white"
                     android:background="@drawable/bg_chip" android:padding="8dp"
                     android:gravity="center" android:layout_marginEnd="6dp"/>
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                    android:layout_weight="1" android:text="💨 12 km/h"
-                    android:textSize="12sp" android:textColor="@color/white"
+                <TextView
+                    android:id="@+id/tvCalDetailReason"
+                    android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text=""
+                    android:textSize="11sp" android:textColor="@color/white"
                     android:background="@drawable/bg_chip" android:padding="8dp"
                     android:gravity="center"/>
             </LinearLayout>
+        </LinearLayout>
+
+        <!-- Best day summary (shown when detail card not selected) -->
+        <LinearLayout
+            android:id="@+id/llCalBestDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_best"
+            android:padding="16dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:id="@+id/tvCalBestDayLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📅 Loading best day…"
+                android:textSize="13sp"
+                android:textColor="@color/green_good"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvCalBestDayReason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="4dp" />
         </LinearLayout>
 
         <!-- Export button -->

@@ -6,6 +6,10 @@
     <item android:id="@+id/nav_calendar"
         android:icon="@drawable/ic_nav_calendar"
         android:title="Calendar" />
+    <!-- Placeholder for the center FAB -->
+    <item android:id="@+id/nav_forecast"
+        android:icon="@android:color/transparent"
+        android:title="" />
     <item android:id="@+id/nav_alerts"
         android:icon="@drawable/ic_nav_alerts"
         android:title="Alerts" />

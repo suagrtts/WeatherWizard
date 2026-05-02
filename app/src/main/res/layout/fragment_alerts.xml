@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
+    android:paddingBottom="80dp"
+    android:clipToPadding="false"
     android:overScrollMode="never">
 
     <LinearLayout
@@ -51,106 +53,40 @@
             android:paddingStart="16dp"
             android:layout_marginBottom="10dp" />
 
-        <!-- Thunderstorm card -->
+        <!-- Dynamic alert cards container -->
         <LinearLayout
+            android:id="@+id/llAlertsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="14dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_alert_severe">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="⛈" android:textSize="28sp" android:layout_marginEnd="12dp"/>
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:orientation="vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Thunderstorm Warning"
-                    android:textSize="14sp" android:textStyle="bold" android:textColor="@color/white"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Today, 6:00 PM – 10:00 PM"
-                    android:textSize="11sp" android:textColor="@color/text_muted" android:layout_marginTop="2dp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Heavy rain and lightning expected. Seek shelter and avoid flood-prone areas."
-                    android:textSize="12sp" android:textColor="@color/text_secondary"
-                    android:layout_marginTop="6dp" android:lineSpacingExtra="2dp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="SEVERE"
-                    android:textSize="10sp" android:textStyle="bold" android:textColor="@color/red_bad"
-                    android:background="@drawable/bg_badge_severe"
-                    android:paddingStart="10dp" android:paddingEnd="10dp"
-                    android:paddingTop="4dp" android:paddingBottom="4dp"
-                    android:layout_marginTop="8dp"/>
-            </LinearLayout>
-        </LinearLayout>
+            android:orientation="vertical"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:layout_marginBottom="8dp" />
 
-        <!-- Rain card -->
+        <!-- No alerts placeholder -->
         <LinearLayout
+            android:id="@+id/llNoAlerts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="14dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="24dp"
             android:layout_marginStart="14dp"
             android:layout_marginEnd="14dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_alert_advisory">
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_glass_card"
+            android:visibility="gone">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="🌧" android:textSize="28sp" android:layout_marginEnd="12dp"/>
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:orientation="vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Rain Advisory"
-                    android:textSize="14sp" android:textStyle="bold" android:textColor="@color/white"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Tomorrow, 9:00 AM – 3:00 PM"
-                    android:textSize="11sp" android:textColor="@color/text_muted" android:layout_marginTop="2dp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Continuous moderate rainfall expected. Bring an umbrella."
-                    android:textSize="12sp" android:textColor="@color/text_secondary"
-                    android:layout_marginTop="6dp" android:lineSpacingExtra="2dp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="ADVISORY"
-                    android:textSize="10sp" android:textStyle="bold" android:textColor="@color/rain_color"
-                    android:background="@drawable/bg_badge_advisory"
-                    android:paddingStart="10dp" android:paddingEnd="10dp"
-                    android:paddingTop="4dp" android:paddingBottom="4dp"
-                    android:layout_marginTop="8dp"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- UV card -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="14dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/bg_alert_moderate">
+                android:text="✅" android:textSize="36sp" android:gravity="center"
+                android:layout_marginBottom="8dp"/>
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="☀️" android:textSize="28sp" android:layout_marginEnd="12dp"/>
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:orientation="vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="High UV Index"
-                    android:textSize="14sp" android:textStyle="bold" android:textColor="@color/white"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Wed, 10:00 AM – 4:00 PM"
-                    android:textSize="11sp" android:textColor="@color/text_muted" android:layout_marginTop="2dp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="UV Index at 8 (Very High). Wear sunscreen SPF 50+."
-                    android:textSize="12sp" android:textColor="@color/text_secondary"
-                    android:layout_marginTop="6dp" android:lineSpacingExtra="2dp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="MODERATE"
-                    android:textSize="10sp" android:textStyle="bold" android:textColor="@color/amber_ok"
-                    android:background="@drawable/bg_badge_moderate"
-                    android:paddingStart="10dp" android:paddingEnd="10dp"
-                    android:paddingTop="4dp" android:paddingBottom="4dp"
-                    android:layout_marginTop="8dp"/>
-            </LinearLayout>
+                android:text="No active alerts"
+                android:textSize="15sp" android:textStyle="bold" android:textColor="@color/white"
+                android:gravity="center"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Weather conditions look fine for now."
+                android:textSize="12sp" android:textColor="@color/text_muted"
+                android:gravity="center" android:layout_marginTop="4dp"/>
         </LinearLayout>
 
         <!-- Notification settings -->
@@ -161,10 +97,11 @@
             android:background="@drawable/bg_glass_card"
             android:padding="16dp"
             android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp">
+            android:layout_marginEnd="14dp"
+            android:layout_marginTop="8dp">
 
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="NOTIFICATION SETTINGS"
+                android:text="ALARM SETTINGS"
                 android:textSize="11sp" android:textStyle="bold"
                 android:textColor="@color/text_muted" android:letterSpacing="0.08"
                 android:layout_marginBottom="12dp"/>
@@ -178,6 +115,7 @@
                     android:layout_weight="1" android:text="Storm Warnings"
                     android:textSize="14sp" android:textColor="@color/white"/>
                 <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchStorm"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:checked="true" android:thumbTint="@color/white" android:trackTint="@color/azure"/>
             </LinearLayout>
@@ -191,6 +129,7 @@
                     android:layout_weight="1" android:text="Rain Alerts"
                     android:textSize="14sp" android:textColor="@color/white"/>
                 <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchRain"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:checked="true" android:thumbTint="@color/white" android:trackTint="@color/azure"/>
             </LinearLayout>
@@ -204,6 +143,7 @@
                     android:layout_weight="1" android:text="Temperature Extremes"
                     android:textSize="14sp" android:textColor="@color/white"/>
                 <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchHeat"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:checked="false" android:thumbTint="@color/white" android:trackTint="@color/azure"/>
             </LinearLayout>
@@ -217,6 +157,7 @@
                     android:layout_weight="1" android:text="Daily Morning Briefing"
                     android:textSize="14sp" android:textColor="@color/white"/>
                 <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchMorning"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:checked="true" android:thumbTint="@color/white" android:trackTint="@color/azure"/>
             </LinearLayout>

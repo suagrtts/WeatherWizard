@@ -2,31 +2,50 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="bg_dark">#0A1628</color>
-    <color name="bg_mid">#0F2447</color>
+
+    <!-- Design System Colors from Prototype -->
+    <color name="sky_deep">#0A1628</color>
+    <color name="sky_mid">#0F2447</color>
+    <color name="sky_blue">#1A3A6E</color>
     <color name="azure">#2563EB</color>
     <color name="azure_light">#3B82F6</color>
     <color name="cyan">#06B6D4</color>
+    <color name="dawn">#F59E0B</color>
+    <color name="dusk">#F97316</color>
+    <color name="cloud">#E2E8F0</color>
+    <color name="mist">#94A3B8</color>
+    <color name="frost">#F8FAFC</color>
+    <color name="storm">#1E293B</color>
+    <color name="rain">#0EA5E9</color>
+    <color name="sun">#FBBF24</color>
     <color name="green_good">#10B981</color>
-    <color name="amber_ok">#F59E0B</color>
     <color name="red_bad">#EF4444</color>
-    <color name="sun_color">#FBBF24</color>
-    <color name="rain_color">#0EA5E9</color>
-    <color name="text_muted">#94A3B8</color>
-    <color name="text_secondary">#CBD5E1</color>
+    <color name="amber_ok">#F59E0B</color>
+
+    <!-- Transparency Overlays -->
+    <color name="glass_bg">#14FFFFFF</color>
+    <color name="glass_border">#26FFFFFF</color>
+
+    <!-- Legacy Mappings for Compatibility -->
+    <color name="bg_dark">@color/sky_deep</color>
+    <color name="bg_mid">@color/sky_mid</color>
+    <color name="text_muted">@color/mist</color>
+    <color name="text_secondary">@color/cloud</color>
+    <color name="rain_color">@color/rain</color>
+    <color name="sun_color">@color/sun</color>
     <color name="field_bg">#12213D</color>
     <color name="field_border">#26344F</color>
     <color name="divider">#1A2A42</color>
     <color name="nav_bg">#0A0F1C</color>
-    <color name="colorPrimary">#2563EB</color>
-    <color name="colorPrimaryVariant">#1A3A6E</color>
+    <color name="colorPrimary">@color/azure</color>
+    <color name="colorPrimaryVariant">@color/sky_blue</color>
     <color name="colorOnPrimary">#FFFFFF</color>
-    <color name="colorSecondary">#06B6D4</color>
+    <color name="colorSecondary">@color/cyan</color>
     <color name="colorOnSecondary">#FFFFFF</color>
-    <color name="colorSurface">#0F2447</color>
+    <color name="colorSurface">@color/sky_mid</color>
     <color name="colorOnSurface">#FFFFFF</color>
-    <color name="colorBackground">#0A1628</color>
+    <color name="colorBackground">@color/sky_deep</color>
     <color name="colorOnBackground">#FFFFFF</color>
-    <color name="colorError">#EF4444</color>
+    <color name="colorError">@color/red_bad</color>
     <color name="colorOnError">#FFFFFF</color>
 </resources>

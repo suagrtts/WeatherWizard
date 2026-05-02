@@ -6,30 +6,41 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.textfield.TextInputEditText
 import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.lifecycleScope
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
-import androidx.credentials.CustomCredential
-import androidx.credentials.exceptions.GetCredentialException
 
+/**
+ * LoginActivity — authenticates users against SQLite WeatherDatabase.
+ *
+ * Auth flow:
+ *   1. Email+password validated locally (format checks)
+ *   2. db.authenticateUser() queries the users table
+ *   3. On success, UserSession.createLoginSession() + UserSession.registerAccount() sync
+ *   4. Google sign-in: registers the Google user in SQLite on first use
+ */
 class LoginActivity : AppCompatActivity() {
-    private val WEB_CLIENT_ID = "373644796614-bgpg2oko7h1sb06de2ijd29qtgdufjf5.apps.googleusercontent.com"
-    private lateinit var editUsername: TextInputEditText
-    private lateinit var editPassword: TextInputEditText
-    private lateinit var btnLogin: Button
-    private lateinit var btnGoogle: Button
-    private lateinit var tvForgotPassword: TextView
-    private lateinit var tvCreateAccount: TextView
-    private lateinit var tvGuestAccess: TextView
 
-    private val adminEmail    = "admin123@gmail.com"
-    private val adminPassword = "123456"
+    private val WEB_CLIENT_ID =
+        "373644796614-bgpg2oko7h1sb06de2ijd29qtgdufjf5.apps.googleusercontent.com"
+
+    private lateinit var editUsername    : TextInputEditText
+    private lateinit var editPassword    : TextInputEditText
+    private lateinit var btnLogin        : Button
+    private lateinit var btnGoogle       : Button
+    private lateinit var tvForgotPassword: TextView
+    private lateinit var tvCreateAccount : TextView
+    private lateinit var tvGuestAccess   : TextView
+
+    private val db      by lazy { WeatherDatabase.getInstance(this) }
+    private val session by lazy { UserSession(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,72 +56,37 @@ class LoginActivity : AppCompatActivity() {
         tvCreateAccount  = findViewById(R.id.tvCreateAccount)
         tvGuestAccess    = findViewById(R.id.tvGuestAccess)
 
-        // ── Log In ────────────────────────────────────────────────────────────
+        // ── Email + password login ─────────────────────────────────────────────
         btnLogin.setOnClickListener {
-            val email    = editUsername.text.toString().trim()
-            val password = editPassword.text.toString().trim()
+            val email = editUsername.text.toString().trim()
+            val pass  = editPassword.text.toString().trim()
 
+            if (email.isEmpty())                                    { editUsername.error = "Email is required";   return@setOnClickListener }
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())  { editUsername.error = "Enter a valid email"; return@setOnClickListener }
+            if (pass.isEmpty())                                     { editPassword.error = "Password is required";return@setOnClickListener }
+            if (pass.length < 6)                                    { editPassword.error = "Minimum 6 characters";return@setOnClickListener }
 
-
-            if (email.isEmpty()) {
-                editUsername.error = "Email is required"
-                return@setOnClickListener
-            }
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                editUsername.error = "Enter a valid email"
-                return@setOnClickListener
-            }
-            if (password.isEmpty()) {
-                editPassword.error = "Password is required"
-                return@setOnClickListener
-            }
-            if (password.length < 6) {
-                editPassword.error = "Minimum 6 characters"
-                return@setOnClickListener
-            }
-
-            val session = UserSession(this)
-
-            // Get the saved account from SharedPreferences
-            val savedEmail = session.getRegisteredEmail()
-            val savedPassword = session.getRegisteredPassword()
-            val savedName = session.getRegisteredName() ?: "User"
-
-            // Check credentials FIRST
-            if (email == adminEmail && password == adminPassword) {
-                session.createLoginSession("Admin User", email)
-                Toast.makeText(this, "Welcome, Admin!", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("WELCOME_MESSAGE", "Welcome back, Admin User!")
-                startActivity(intent)
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-                finish()
-            } else if (savedEmail != null && email == savedEmail && password == savedPassword) {
-                session.createLoginSession(savedName, email)
-                Toast.makeText(this, "Welcome back, $savedName!", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("WELCOME_MESSAGE", "Welcome back, $savedName!")
-                startActivity(intent)
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-                finish()
+            val displayName = db.authenticateUser(email, pass)
+            if (displayName != null) {
+                // Sync session + legacy SharedPreferences
+                session.createLoginSession(displayName, email)
+                session.registerAccount(displayName, email, pass)
+                AppToast.show(this, "Welcome back, $displayName!")
+                openMain("Welcome back, $displayName!")
             } else {
-                Toast.makeText(this, "Invalid credentials. Please try again.", Toast.LENGTH_SHORT).show()
+                AppToast.show(this, "Invalid email or password. Please try again.")
                 editPassword.text?.clear()
             }
         }
 
-        // ── Google ────────────────────────────────────────────────────────────
+        // ── Google sign-in ────────────────────────────────────────────────────
         btnGoogle.setOnClickListener {
-            lifecycleScope.launch {
-                triggerGoogleSignIn(credentialManager)
-            }
+            lifecycleScope.launch { triggerGoogleSignIn(credentialManager) }
         }
 
         // ── Forgot password ───────────────────────────────────────────────────
         tvForgotPassword.setOnClickListener {
-            Toast.makeText(this, "Password reset coming soon.", Toast.LENGTH_SHORT).show()
+            AppToast.show(this, "Password reset coming soon.")
         }
 
         // ── Go to Register ────────────────────────────────────────────────────
@@ -121,67 +97,60 @@ class LoginActivity : AppCompatActivity() {
 
         // ── Guest access ──────────────────────────────────────────────────────
         tvGuestAccess.setOnClickListener {
-            Toast.makeText(this, "Continuing as Guest", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, MainActivity::class.java))
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-            finish()
+            AppToast.show(this, "Continuing as Guest")
+            openMain("Welcome, Guest!")
         }
+    }
+
+    private fun openMain(message: String) {
+        startActivity(
+            Intent(this, MainActivity::class.java).putExtra("WELCOME_MESSAGE", message)
+        )
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        finish()
     }
 
     private suspend fun triggerGoogleSignIn(credentialManager: CredentialManager) {
         val nonce = java.util.UUID.randomUUID().toString()
-
-        val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+        val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
             .setServerClientId(WEB_CLIENT_ID)
             .setAutoSelectEnabled(true)
             .setNonce(nonce)
             .build()
 
-        val request: GetCredentialRequest = GetCredentialRequest.Builder()
+        val request = GetCredentialRequest.Builder()
             .addCredentialOption(googleIdOption)
             .build()
 
         try {
-            val result = credentialManager.getCredential(
-                request = request,
-                context = this@LoginActivity
-            )
-
+            val result     = credentialManager.getCredential(request = request, context = this)
             val credential = result.credential
 
-            if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+            if (credential is CustomCredential &&
+                credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+            ) {
+                val googleCred  = GoogleIdTokenCredential.createFrom(credential.data)
+                val email       = googleCred.id
+                val displayName = googleCred.displayName ?: "Google User"
 
-                val email = googleIdTokenCredential.id
-                // Use the Google name, or default to "Google User" if it's null
-                val displayName = googleIdTokenCredential.displayName ?: "Google User"
+                // Register in SQLite on first Google login
+                if (!db.userExists(email)) {
+                    db.registerUser(displayName, email, java.util.UUID.randomUUID().toString())
+                }
 
-                Log.d("Auth", "Google Sign-in Success: $email, $displayName")
-
-                // ── FIX: Correctly instantiate and save Google data to SharedPreferences ──
-                val session = UserSession(this@LoginActivity)
                 session.createLoginSession(displayName, email)
-
-                Toast.makeText(this, "Welcome, $displayName!", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                // Pass data to next screen (Assignment Requirement)
-                intent.putExtra("WELCOME_MESSAGE", "Welcome back, $displayName!")
-                startActivity(intent)
-                finish()
-
+                AppToast.show(this, "Welcome, $displayName!")
+                openMain("Welcome, $displayName!")
             } else {
-                Log.e("Auth", "Unexpected type of credential: ${credential.type}")
-                Toast.makeText(this, "Unexpected login error", Toast.LENGTH_SHORT).show()
+                AppToast.show(this, "Unexpected credential type.")
             }
-
         } catch (e: GetCredentialException) {
-            Log.e("Auth", "Credential Manager Error: ${e.message}, Type: ${e.type}")
-            Toast.makeText(this, "Google Sign-in failed: ${e.message}", Toast.LENGTH_LONG).show()
+            Log.e("Auth", "Credential error: ${e.message}")
+            AppToast.show(this, "Google Sign-in failed: ${e.message}", longDuration = true)
         } catch (e: Exception) {
-            Log.e("Auth", "General Error: ${e.message}")
-            Toast.makeText(this, "An error occurred during sign-in", Toast.LENGTH_SHORT).show()
+            Log.e("Auth", "Sign-in error: ${e.message}")
+            AppToast.show(this, "An error occurred during sign-in.")
         }
     }
 }
