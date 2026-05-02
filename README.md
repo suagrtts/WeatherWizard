@@ -32,31 +32,6 @@ Weather Wizard is a modern Android application that provides users with real-tim
 * 🧩 **Modular UI**
 
   * Built using Fragments for better navigation and scalability
- 
----
-
-## 📂 Project Structure
-
-```
-weatherwizardui/
-│
-├── activities/
-│   ├── LoginActivity
-│   ├── ChangePasswordActivity
-│
-├── fragments/
-│   ├── ProfileFragment
-│   ├── ChangePasswordFragment
-│
-├── utils/
-│   ├── UserSession
-│
-├── res/
-│   ├── layout/
-│   ├── values/
-│
-└── AndroidManifest.xml
-```
 
 ---
 
@@ -71,24 +46,6 @@ weatherwizardui/
 2. Open the project in **Android Studio**
 
 3. Build and run on an emulator or Android device
-
----
-
-## 🔑 Default Credentials (if applicable)
-
-```
-Email: admin@example.com
-Password: admin123
-```
-
-*(Modify based on your implementation)*
-
----
-
-## ⚠️ Known Issues
-
-* "Add Location" and "Activity Type" features are not yet implemented
-* Weather data is currently static or placeholder-based (if no API yet)
 
 ---
 
